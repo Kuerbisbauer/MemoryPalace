@@ -33,7 +33,6 @@ public class MainWindow extends JFrame {
 	 * ##############################
 	 * 
 	 */
-	
 	private Control 		control 		= new Control();
 	private RandomThoughts 	randomThoughts	= new RandomThoughts();
 	

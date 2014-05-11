@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-	<persistence-unit name="Memory_Palace">
+	<persistence-unit name="Memory_Palace" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>kb.entities.Idee</class>
+		<class>kb.entities.Tag</class>
+		<class>kb.entities.Tag_Idee</class>
+		<class>kb.entities.Image</class>
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:~/memoryPalace"/>
+			<property name="javax.persistence.jdbc.user" value="sa"/>
+		</properties>
 	</persistence-unit>
 </persistence>

@@ -7,14 +7,21 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import kb.gui.newIdea.NewIdea;
+
 public class Control extends JPanel {
+	
+	/*	###############################
+	 * 	Konstante
+	 * 	###############################
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	/*
 	 * ##############################
 	 * Swing Komponenten
 	 * ##############################
 	 */
-	
 	private JButton newIdea 	= new JButton("Neue Idee");
 	private JButton ideaList 	= new JButton("Ideenliste");
 	private JButton settings	= new JButton("Einstellugnen");
@@ -54,7 +61,8 @@ public class Control extends JPanel {
 		newIdea.addActionListener(new ActionListener() {	
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Neue Idee!");
+				NewIdea ni = new NewIdea();
+				ni.setVisible(true);
 			}
 		});
 		ideaList.addActionListener(new ActionListener() {	
