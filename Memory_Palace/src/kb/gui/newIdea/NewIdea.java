@@ -1,19 +1,14 @@
 package kb.gui.newIdea;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import kb.gui.components.MPTextfield;
 
@@ -108,6 +103,27 @@ public class NewIdea extends JDialog {
 				if(!titleField.isClickedState()){
 					titleField.setText("");
 					titleField.setClickedState(true);
+				}
+			}
+		});
+		
+		imageButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+				//Gibt einen Int Wert zurück als Indentikator für die gerdrückte(n) Taste(n)
+				int modifierInt = arg0.getModifiers();
+				
+				//Der Integerwert wird in einen lesbaren String umgewandelt
+				String modifier = MouseEvent.getMouseModifiersText(modifierInt);
+				
+				//Regex: Es wird nach einem + gesucht 
+				String[] modifierKey = modifier.split("\\+");
+				
+				switch (modifierInt){
+					//Ctrl/Strg
+					case 18:
+						System.out.println("Platzhalter!");
 				}
 			}
 		});
