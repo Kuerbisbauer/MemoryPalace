@@ -2,21 +2,27 @@ package kb.gui.newIdea;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import kb.gui.components.MPTextfield;
+import kb.gui.imageControl.ShowImage;
 
 public class NewIdea extends JDialog {
 	
-	/*	###############################
-	 * 	Konstante
-	 * 	###############################
+	/* 
+	 * ###############################
+	 * Konstante
+	 * ###############################
 	 */
 	private static final long serialVersionUID = 1L;
 	
@@ -39,6 +45,7 @@ public class NewIdea extends JDialog {
 	 * ##############################
 	 */
 	
+	//Eigenes Textfeld. Beinhaltet einen Statuswert ob in das Textfeld geklickt wurde oder nicht
 	private MPTextfield titleField 	= new MPTextfield("Titel");
 	
 	private JButton	imageButton		= new JButton("Image");
@@ -56,6 +63,19 @@ public class NewIdea extends JDialog {
 	private JPanel	topPanel 	= new JPanel();
 	private JPanel  bottomPanel	= new JPanel();
 	
+	/*
+	 * ##############################
+	 * Sonstige Attribute
+	 * ##############################
+	 */
+	
+	//Bilddatei
+	private File imgFile;
+	
+	/**
+	 * <b>Konstruktor</b><p>
+	 * Richtet die Größe, Position des Fensters ein und setzt dieses in den Vordergrund (modal).
+	 */
 	public NewIdea(){
 		this.setModal(true);
 		//Position und Größe des Fensters
@@ -118,15 +138,74 @@ public class NewIdea extends JDialog {
 				String modifier = MouseEvent.getMouseModifiersText(modifierInt);
 				
 				//Regex: Es wird nach einem + gesucht 
-				String[] modifierKey = modifier.split("\\+");
+				//String[] modifierKey = modifier.split("\\+");
 				
+				//Fälle von Tastenkombinationen werden behandelt
 				switch (modifierInt){
+					//Linksklick
+					case 16:
+						executeImgSelection();
 					//Ctrl/Strg
 					case 18:
-						System.out.println("Platzhalter!");
+						showChosenImage();
 				}
 			}
 		});
+		
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+	}
+	
+	/**
+	 * Der JDialog ShowImage wird aufgerufen.<br>
+	 * Falls kein Bild ausgewählt wurde, so wird eine Fehlermeldung angezeigt.
+	 */
+	protected void showChosenImage() {
+		if(getImgFile() != null){
+			ShowImage si = new ShowImage(getImgFile());
+			si.setVisible(true);
+		}else{
+			System.out.println("Es wurde noch kein Bild ausgewählt!");
+		}
+	}
+
+	/**
+	 * Ein Bild wird ausgewählt und der Text des "imageButton" Buttons wird dementsprechend geändert.<br>
+	 * Falls der Dateiname zu lang ist, so wird dieser gekürzt (max 15 Zeichen).
+	 */
+	protected void executeImgSelection() {
+		selectImgFile();	
+		String fileName = getImgFile().getName();
+		
+		//Ist der String zu groß wird dieser gekürzt
+		if(fileName.length() > 15)
+			//maximal 15 Zeichen
+			fileName = fileName.substring(0, 15);
+		
+		imageButton.setText(fileName);
+	}
+
+	/**
+	 * Mittels FileChooser wird ein Bild ausgewählt
+	 */
+	protected void selectImgFile() {
+		JFileChooser jfc = new JFileChooser();
+		int returnValue = jfc.showOpenDialog(null);
+		
+		if(returnValue == JFileChooser.APPROVE_OPTION){
+			setImgFile(jfc.getSelectedFile());
+		}	
 	}
 
 	/**
@@ -154,5 +233,15 @@ public class NewIdea extends JDialog {
 		
 		topPanel.add(titleField);
 		topPanel.add(imageButton);
+	}
+
+	
+	
+	public File getImgFile() {
+		return imgFile;
+	}
+
+	public void setImgFile(File imgFile) {
+		this.imgFile = imgFile;
 	}
 }

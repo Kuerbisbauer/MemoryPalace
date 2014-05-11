@@ -10,12 +10,10 @@ public class MPTextfield extends JTextField {
 	 */
 	private boolean clickedState = false;
 	
-	
 	public MPTextfield(String string){
 		super();
 		setText(string);
 	}
-
 
 	public boolean isClickedState() {
 		return clickedState;
