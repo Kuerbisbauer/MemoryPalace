@@ -49,6 +49,7 @@ public class NewIdea extends JDialog {
 	private MPTextfield titleField 	= new MPTextfield("Titel");
 	
 	private JButton	imageButton		= new JButton("Image");
+	private JButton linkButton		= new JButton("Verbinden");
 	private JButton	saveButton		= new JButton("Speichern");
 	private JButton	cancelButton	= new JButton("Abbrechen");
 	
@@ -99,9 +100,9 @@ public class NewIdea extends JDialog {
 		//Erstellt ein JPanel um die Buttons Speichern und Abbrechen unterzukriegen
 		bottomPanel();
 		
-		getContentPane().add(topPanel, BorderLayout.NORTH);
-		getContentPane().add(textField, BorderLayout.CENTER);
-		getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+		this.add(topPanel, BorderLayout.NORTH);
+		this.add(textField, BorderLayout.CENTER);
+		this.add(bottomPanel, BorderLayout.SOUTH);
 		
 		//Actionlistener
 		addActionlistener();
@@ -152,17 +153,26 @@ public class NewIdea extends JDialog {
 			}
 		});
 		
+		linkButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Verlinken");
+			}
+		});
+		
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+				NewIdeaOptions nio = new NewIdeaOptions();
+				nio.saveIdea(imgFile, textField, titleField);
+				dispose();
 			}
 		});
 		
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				dispose();
 			}
 		});
 	}
@@ -233,6 +243,7 @@ public class NewIdea extends JDialog {
 		
 		topPanel.add(titleField);
 		topPanel.add(imageButton);
+		topPanel.add(linkButton);
 	}
 
 	

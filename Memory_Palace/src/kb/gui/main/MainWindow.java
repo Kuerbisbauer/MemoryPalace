@@ -6,7 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class MainWindow extends JFrame {
+import kb.interfaces.NewIdeaCreated;
+
+public class MainWindow extends JFrame implements NewIdeaCreated {
 
 	/*	###############################
 	 * 	Konstante
@@ -49,6 +51,11 @@ public class MainWindow extends JFrame {
 		}
 		
 		buildGui();
+		useObserverPattern();
+	}
+
+	private void useObserverPattern() {
+		control.addNewIdeaOptionsListener(this);
 	}
 
 	/**
@@ -59,7 +66,6 @@ public class MainWindow extends JFrame {
 	 */
 	private void buildGui() {
 		
-		
 		//Position und Größe des Fensters
 		setBounds(POSX, POSY, WIDTH, HEIGTH);
 		
@@ -69,5 +75,10 @@ public class MainWindow extends JFrame {
 		//JPanels werden in das BorderLayout eingefügt
 		this.add(control, BorderLayout.NORTH);
 		this.add(randomThoughts, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void refreshGUI() {
+		System.out.println("GUI refresht");
 	}
 }
