@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 
 import kb.gui.components.MPTextfield;
 import kb.gui.imageControl.ShowImage;
+import kb.gui.main.MainWindow;
+import kb.interfaces.NewIdeaCreated;
 
 public class NewIdea extends JDialog {
 	
@@ -163,9 +165,13 @@ public class NewIdea extends JDialog {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				NewIdeaOptions nio = new NewIdeaOptions();
-				nio.saveIdea(imgFile, textField, titleField);
-				dispose();
+				if(checkData()){
+					NewIdeaOptions nio = new NewIdeaOptions();
+					nio.saveIdea(imgFile, textField, titleField);
+					dispose();
+				}else{
+					checkMissingData();
+				}
 			}
 		});
 		
@@ -177,6 +183,37 @@ public class NewIdea extends JDialog {
 		});
 	}
 	
+	/**
+	 * Fehlender Daten werden in der Konsole gemeldet.
+	 */
+	protected void checkMissingData() {
+		if(titleField.equals(" ") || titleField.equals("Titel"))
+			System.out.println("Titelfeld leer!");
+		if(textField.getText().equals(""))
+			System.out.println("Textfeld leer!");
+		if(imgFile == null)
+			System.out.println("Kein Image eingefügt!");
+	}
+
+	/**
+	 * Überprüft ob das Titelfeld nicht leer ist oder "Titel" enthält.<br>
+	 * Überprüft ob im Textfeld etwas drin steht.<br>
+	 * Überprüft ob ein File vorhanden ist.<br>
+	 * 
+	 * @return - Wenn alles vorhanden ist TRUE
+	 */
+	protected boolean checkData() {
+		boolean bool = false;
+		
+		if(!titleField.equals("") || !titleField.equals("Titel")){
+			if(!textField.getText().equals("")){
+				if(imgFile != null)
+					bool = true;
+			}
+		}
+		return bool;
+	}
+
 	/**
 	 * Der JDialog ShowImage wird aufgerufen.<br>
 	 * Falls kein Bild ausgewählt wurde, so wird eine Fehlermeldung angezeigt.
@@ -245,8 +282,6 @@ public class NewIdea extends JDialog {
 		topPanel.add(imageButton);
 		topPanel.add(linkButton);
 	}
-
-	
 	
 	public File getImgFile() {
 		return imgFile;
