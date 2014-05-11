@@ -9,8 +9,11 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 public class ShowImage extends JDialog {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private File file;
 	/**
@@ -39,12 +42,13 @@ public class ShowImage extends JDialog {
 			int height = img.getHeight();
 			int width  = img.getWidth();
 			
-			//Der JLabel wird gebraucht um das Bild anzuzeigen
-			JLabel l = new JLabel("");
+			//ImageIcon wird aus der Datei gebaut
+			ImageIcon ii = new ImageIcon(file.toString());
 			
-			//BufferedImage wird in ImageIcon umgesetzt, damit JLabel diesen anzeigen kann
-			l.setIcon(new ImageIcon(img));
-			this.add(l, BorderLayout.CENTER);
+			//In die ScrollPane wird ein JLabel eingebunden (GrabAndScrollLabel extends JLabel)
+			JScrollPane jsp = new JScrollPane(new GrabAndScrollLabel(ii));
+
+			this.add(jsp, BorderLayout.CENTER);
 			
 			//Die Größe des Fensters wird an die Größe des Bildes angepasst.
 			this.setSize(width, height);
