@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,6 +18,7 @@ import javax.swing.JPanel;
 
 import kb.gui.components.MPTextfield;
 import kb.gui.imageControl.ShowImage;
+import kb.gui.main.ErrorDialog;
 import kb.gui.main.MainWindow;
 import kb.interfaces.NewIdeaCreated;
 
@@ -148,9 +151,11 @@ public class NewIdea extends JDialog {
 					//Linksklick
 					case 16:
 						executeImgSelection();
-					//Ctrl/Strg
+						break;
+					//Ctrl+Linksklick
 					case 18:
 						showChosenImage();
+						break;
 				}
 			}
 		});
@@ -184,15 +189,16 @@ public class NewIdea extends JDialog {
 	}
 	
 	/**
-	 * Fehlender Daten werden in der Konsole gemeldet.
+	 * Fehlende Daten werden in die "errorArray" Arraylist hinzugefügt für
+	 * weitere Fehlerbehandlungen.
 	 */
 	protected void checkMissingData() {
-		if(titleField.equals(" ") || titleField.equals("Titel"))
-			System.out.println("Titelfeld leer!");
+		if(titleField.getText().trim().equals("") || titleField.getText().equals("Titel"))
+			errorArray.add("Titelfeld ist leer oder wurde nicht geändert");
 		if(textField.getText().equals(""))
-			System.out.println("Textfeld leer!");
+			errorArray.add("Der Textbereich ist leer");
 		if(imgFile == null)
-			System.out.println("Kein Image eingefügt!");
+			errorArray.add("Es wurde kein Bild eingefügt");
 	}
 
 	/**
@@ -232,27 +238,33 @@ public class NewIdea extends JDialog {
 	 * Falls der Dateiname zu lang ist, so wird dieser gekürzt (max 15 Zeichen).
 	 */
 	protected void executeImgSelection() {
-		selectImgFile();	
-		String fileName = getImgFile().getName();
-		
-		//Ist der String zu groß wird dieser gekürzt
-		if(fileName.length() > 15)
-			//maximal 15 Zeichen
-			fileName = fileName.substring(0, 15);
-		
-		imageButton.setText(fileName);
+		if(selectImgFile() == JFileChooser.APPROVE_OPTION){
+			String fileName = getImgFile().getName();
+			
+			//Ist der String zu groß wird dieser gekürzt
+			if(fileName.length() > 15)
+				//maximal 15 Zeichen
+				fileName = fileName.substring(0, 15);
+			
+			imageButton.setText(fileName);
+		}else{
+			System.out.println("Abgebrochen!");
+		}
 	}
 
 	/**
 	 * Mittels FileChooser wird ein Bild ausgewählt
+	 * @return 
 	 */
-	protected void selectImgFile() {
+	protected int selectImgFile() {
 		JFileChooser jfc = new JFileChooser();
 		int returnValue = jfc.showOpenDialog(null);
 		
 		if(returnValue == JFileChooser.APPROVE_OPTION){
 			setImgFile(jfc.getSelectedFile());
-		}	
+		}
+		
+		return returnValue;
 	}
 
 	/**
@@ -283,11 +295,30 @@ public class NewIdea extends JDialog {
 		topPanel.add(linkButton);
 	}
 	
+	private List<String> errorArray = new ArrayList<String>();
+	
+	/**
+	 * Holt sich das Array von Error Strings und erstellt einen neuen
+	 * JDialog um die Fehlermeldung auszugeben.
+	 */
+	private void showError(){
+		ErrorDialog ed = new ErrorDialog(getErrorArray());
+		ed.setVisible(true);
+	}
+	
 	public File getImgFile() {
 		return imgFile;
 	}
 
 	public void setImgFile(File imgFile) {
 		this.imgFile = imgFile;
+	}
+
+	public List<String> getErrorArray() {
+		return errorArray;
+	}
+
+	public void setErrorArray(List<String> errorStrings) {
+		this.errorArray = errorStrings;
 	}
 }
