@@ -11,6 +11,7 @@ import net.miginfocom.swing.MigLayout;
 
 public class ErrorDialog extends JDialog {
 
+	//TODO ActionListener + DOKU
 	/*	###############################
 	 * 	Konstante
 	 * 	###############################
