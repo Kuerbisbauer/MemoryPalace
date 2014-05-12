@@ -199,6 +199,9 @@ public class NewIdea extends JDialog {
 			errorArray.add("Der Textbereich ist leer");
 		if(imgFile == null)
 			errorArray.add("Es wurde kein Bild eingefügt");
+		
+		if(!errorArray.isEmpty())
+			showError();
 	}
 
 	/**
