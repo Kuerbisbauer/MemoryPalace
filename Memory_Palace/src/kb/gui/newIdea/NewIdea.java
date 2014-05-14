@@ -6,21 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 import kb.gui.components.MPTextfield;
-import kb.gui.imageControl.ShowImage;
-import kb.gui.main.ErrorDialog;
-import kb.gui.main.MainWindow;
-import kb.interfaces.NewIdeaCreated;
 
 public class NewIdea extends JDialog {
 	
@@ -71,12 +63,11 @@ public class NewIdea extends JDialog {
 	
 	/*
 	 * ##############################
-	 * Sonstige Attribute
+	 * Klassen
 	 * ##############################
 	 */
 	
-	//Bilddatei
-	private File imgFile;
+	private NewIdeaOptions newIdeaOptions = new NewIdeaOptions();
 	
 	/**
 	 * <b>Konstruktor</b><p>
@@ -112,164 +103,7 @@ public class NewIdea extends JDialog {
 		//Actionlistener
 		addActionlistener();
 	}
-
-	/**
-	 * Actionlistener für die Komponenten:
-	 * <li>titleField
-	 * <li>imageButton
-	 * <li>saveButton
-	 * <li>cancelButton
-	 */
-	private void addActionlistener() {
-		titleField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				//Bedingung: Zum ersten Mal geklickt?
-				if(!titleField.isClickedState()){
-					titleField.setText("");
-					titleField.setClickedState(true);
-				}
-			}
-		});
-		
-		imageButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				//Gibt einen Int Wert zurück als Indentikator für die gerdrückte(n) Taste(n)
-				int modifierInt = arg0.getModifiers();
-				
-				//Der Integerwert wird in einen lesbaren String umgewandelt
-				String modifier = MouseEvent.getMouseModifiersText(modifierInt);
-				
-				//Regex: Es wird nach einem + gesucht 
-				//String[] modifierKey = modifier.split("\\+");
-				
-				//Fälle von Tastenkombinationen werden behandelt
-				switch (modifierInt){
-					//Linksklick
-					case 16:
-						executeImgSelection();
-						break;
-					//Ctrl+Linksklick
-					case 18:
-						showChosenImage();
-						break;
-				}
-			}
-		});
-		
-		linkButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Verlinken");
-			}
-		});
-		
-		saveButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if(checkData()){
-					NewIdeaOptions nio = new NewIdeaOptions();
-					nio.saveIdea(imgFile, textField, titleField);
-					dispose();
-				}else{
-					checkMissingData();
-				}
-			}
-		});
-		
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-	}
 	
-	/**
-	 * Fehlende Daten werden in die "errorArray" Arraylist hinzugefügt für
-	 * weitere Fehlerbehandlungen.
-	 */
-	protected void checkMissingData() {
-		if(titleField.getText().trim().equals("") || titleField.getText().equals("Titel"))
-			errorArray.add("Titelfeld ist leer oder wurde nicht geändert");
-		if(textField.getText().equals(""))
-			errorArray.add("Der Textbereich ist leer");
-		if(imgFile == null)
-			errorArray.add("Es wurde kein Bild eingefügt");
-		
-		if(!errorArray.isEmpty())
-			showError();
-	}
-
-	/**
-	 * Überprüft ob das Titelfeld nicht leer ist oder "Titel" enthält.<br>
-	 * Überprüft ob im Textfeld etwas drin steht.<br>
-	 * Überprüft ob ein File vorhanden ist.<br>
-	 * 
-	 * @return - Wenn alles vorhanden ist TRUE
-	 */
-	protected boolean checkData() {
-		boolean bool = false;
-		
-		if(!titleField.equals("") || !titleField.equals("Titel")){
-			if(!textField.getText().equals("")){
-				if(imgFile != null)
-					bool = true;
-			}
-		}
-		return bool;
-	}
-
-	/**
-	 * Der JDialog ShowImage wird aufgerufen.<br>
-	 * Falls kein Bild ausgewählt wurde, so wird eine Fehlermeldung angezeigt.
-	 */
-	protected void showChosenImage() {
-		if(getImgFile() != null){
-			ShowImage si = new ShowImage(getImgFile());
-			si.setVisible(true);
-		}else{
-			System.out.println("Es wurde noch kein Bild ausgewählt!");
-		}
-	}
-
-	/**
-	 * Ein Bild wird ausgewählt und der Text des "imageButton" Buttons wird dementsprechend geändert.<br>
-	 * Falls der Dateiname zu lang ist, so wird dieser gekürzt (max 15 Zeichen).
-	 */
-	protected void executeImgSelection() {
-		if(selectImgFile() == JFileChooser.APPROVE_OPTION){
-			String fileName = getImgFile().getName();
-			
-			//Ist der String zu groß wird dieser gekürzt
-			if(fileName.length() > 15)
-				//maximal 15 Zeichen
-				fileName = fileName.substring(0, 15);
-			
-			imageButton.setText(fileName);
-		}else{
-			System.out.println("Abgebrochen!");
-		}
-	}
-
-	/**
-	 * Mittels FileChooser wird ein Bild ausgewählt
-	 * @return 
-	 */
-	protected int selectImgFile() {
-		JFileChooser jfc = new JFileChooser();
-		int returnValue = jfc.showOpenDialog(null);
-		
-		if(returnValue == JFileChooser.APPROVE_OPTION){
-			setImgFile(jfc.getSelectedFile());
-		}
-		
-		return returnValue;
-	}
-
 	/**
 	 * Ein neues JPanel wird erstellt und mit einem FlowLayout versehen.<br><br>
 	 * Beinhaltet:
@@ -297,31 +131,58 @@ public class NewIdea extends JDialog {
 		topPanel.add(imageButton);
 		topPanel.add(linkButton);
 	}
-	
-	private List<String> errorArray = new ArrayList<String>();
-	
+
 	/**
-	 * Holt sich das Array von Error Strings und erstellt einen neuen
-	 * JDialog um die Fehlermeldung auszugeben.
+	 * Actionlistener für die Komponenten:
+	 * <li>titleField
+	 * <li>imageButton
+	 * <li>saveButton
+	 * <li>cancelButton
 	 */
-	private void showError(){
-		ErrorDialog ed = new ErrorDialog(getErrorArray());
-		ed.setVisible(true);
-	}
-	
-	public File getImgFile() {
-		return imgFile;
-	}
-
-	public void setImgFile(File imgFile) {
-		this.imgFile = imgFile;
-	}
-
-	public List<String> getErrorArray() {
-		return errorArray;
-	}
-
-	public void setErrorArray(List<String> errorStrings) {
-		this.errorArray = errorStrings;
+	private void addActionlistener() {
+		titleField.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+				//Bedingung: Zum ersten Mal geklickt?
+				if(!titleField.isClickedState()){
+					titleField.setText("");
+					titleField.setClickedState(true);
+				}
+			}
+		});
+		
+		imageButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				newIdeaOptions.imageButtonMouseClickBehavior(arg0, imageButton);
+			}
+		});
+		
+		linkButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Verlinken");
+			}
+		});
+		
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(newIdeaOptions.checkData(titleField, textField)){
+					newIdeaOptions.saveIdea( textField, titleField);
+					dispose();
+				}else{
+					newIdeaOptions.checkMissingData(titleField, textField);
+				}
+			}
+		});
+		
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 	}
 }
