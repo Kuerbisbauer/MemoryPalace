@@ -1,9 +1,13 @@
 package kb.entities;
 
+import java.io.File;
 import java.io.Serializable;
-import java.sql.Blob;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Entity implementation class for Entity: Image
@@ -22,7 +26,7 @@ public class Image implements Serializable {
 	private int img_id;
 	
 	@Column(name="img_data")
-	private Blob img_data;
+	private File img_data;
 	
 	@Column(name="img_md5")
 	private Byte img_md5;
@@ -35,11 +39,11 @@ public class Image implements Serializable {
 		this.img_id = img_id;
 	}
 
-	public Blob getImg_data() {
+	public File getImg_data() {
 		return img_data;
 	}
 
-	public void setImg_data(Blob img_data) {
+	public void setImg_data(File img_data) {
 		this.img_data = img_data;
 	}
 

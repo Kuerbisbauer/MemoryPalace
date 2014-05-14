@@ -22,7 +22,7 @@ public class Tag_Idee implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name="fk_idea")
-	private Idee fk_idea;
+	private Idea fk_idea;
 	
 	@ManyToOne
 	@JoinColumn(name="fk_tag")
@@ -37,11 +37,11 @@ public class Tag_Idee implements Serializable {
 		this.ti_id = ti_id;
 	}
 
-	public Idee getFk_idea() {
+	public Idea getFk_idea() {
 		return fk_idea;
 	}
 
-	public void setFk_idea(Idee fk_idea) {
+	public void setFk_idea(Idea fk_idea) {
 		this.fk_idea = fk_idea;
 	}
 

@@ -9,9 +9,13 @@ import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 
+import kb.entities.Idea;
+import kb.entities.Image;
 import kb.gui.components.MPTextfield;
 import kb.gui.imageControl.ShowImage;
 import kb.gui.main.ErrorDialog;
+import kb.queries.NewIdeaQueries;
+import kb.queries.NewImageQueries;
 
 public class NewIdeaOptions {
 
@@ -24,8 +28,41 @@ public class NewIdeaOptions {
 	
 	public void saveIdea(JEditorPane textField, MPTextfield titleField){
 		
+		NewImageQueries newImageQueries = new NewImageQueries();
+		NewIdeaQueries newIdeaQueries = new NewIdeaQueries();
+		
+		Image img = createImage(getImgFile());
+		Idea idea = createIdea(textField, titleField, img);
+		
+		newImageQueries.newImage(img);
+		newIdeaQueries.saveIdea(idea);
 		
 		System.out.println("Gespeichert");
+	}
+	
+	/**
+	 * Erstellt ein neues Image Objekt und speichert diese in die DB
+	 * 
+	 * @param file	- Bilddatei
+	 * @return 		- Erstellte Image Objekt
+	 */
+	private Image createImage(File file){
+		Image img = new Image();
+		
+		img.setImg_data(file);
+		img.setImg_md5(null);
+		
+		return img;
+	}
+	
+	private Idea createIdea(JEditorPane textField, MPTextfield titleField, Image img){
+		Idea idea = new Idea();
+		
+		idea.setFk_img(img);
+		idea.setIdea_title(textField.toString());
+		idea.setIdeaText(textField.toString());
+		
+		return idea;
 	}
 	
 	/**

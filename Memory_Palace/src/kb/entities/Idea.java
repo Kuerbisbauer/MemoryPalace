@@ -9,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 
-public class Idee implements Serializable {
+public class Idea implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -25,7 +25,7 @@ public class Idee implements Serializable {
 	private String idea_text;
 	
 	@ManyToOne
-	@Column(name="fk_img")
+	@JoinColumn(name="fk_img")
 	private Image fk_img;
 	
 	public String getIdea_title() {
@@ -34,14 +34,6 @@ public class Idee implements Serializable {
 
 	public void setIdea_title(String idea_title) {
 		this.idea_title = idea_title;
-	}
-
-	public String getIdea_text() {
-		return idea_text;
-	}
-
-	public void setIdea_text(String idea_text) {
-		this.idea_text = idea_text;
 	}
 
 	public int getIdea_id() {
@@ -73,7 +65,7 @@ public class Idee implements Serializable {
 		this.fk_img = fk_img;
 	}
 
-	public Idee() {
+	public Idea() {
 		super();
 	}
 }
