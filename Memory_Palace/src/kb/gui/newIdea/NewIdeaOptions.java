@@ -23,6 +23,8 @@ public class NewIdeaOptions {
 	}
 	
 	public void saveIdea(JEditorPane textField, MPTextfield titleField){
+		
+		
 		System.out.println("Gespeichert");
 	}
 	

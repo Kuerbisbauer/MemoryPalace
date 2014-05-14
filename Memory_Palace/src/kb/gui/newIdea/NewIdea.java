@@ -170,7 +170,7 @@ public class NewIdea extends JDialog {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(newIdeaOptions.checkData(titleField, textField)){
-					newIdeaOptions.saveIdea( textField, titleField);
+					newIdeaOptions.saveIdea(textField, titleField);
 					dispose();
 				}else{
 					newIdeaOptions.checkMissingData(titleField, textField);

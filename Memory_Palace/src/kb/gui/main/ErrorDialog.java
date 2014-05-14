@@ -1,6 +1,8 @@
 package kb.gui.main;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -31,6 +33,19 @@ public class ErrorDialog extends JDialog {
 	private static final int POSX 	= 100;
 	private static final int POSY	= 20;
 	
+	/*
+	 * ###############################
+	 * Swing Komponenten
+	 * ###############################
+	 */
+	private JLabel errorLabel;
+	private JButton ok;
+	
+	/*
+	 * ###############################
+	 * Sonstige Attribute
+	 * ###############################
+	 */
 	private List<String> errorArray;
 	
 	public ErrorDialog(List<String> list){
@@ -45,11 +60,23 @@ public class ErrorDialog extends JDialog {
 		
 		setModal(true);
 		
-		JLabel errorLabel 	= new JLabel(generateErrorMessage());
-		JButton ok			= new JButton("OK");
+		errorLabel 	= new JLabel(generateErrorMessage());
+		ok			= new JButton("OK");
 		
 		this.add(errorLabel, "cell 0 0, wrap");
 		this.add(ok, "span");
+		
+		addActionlistener();
+	}
+
+	private void addActionlistener() {
+		ok.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				errorArray.clear();
+			}
+		});
 	}
 
 	/**
